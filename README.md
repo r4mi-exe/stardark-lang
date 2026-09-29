@@ -6,7 +6,7 @@
 
 A small programming language built from scratch in Java, with a tree-walking interpreter and a bytecode compiler + VM
 
-Very w.i.p
+Current Checkpoint: Scanner
 
 ## Planned features
 
