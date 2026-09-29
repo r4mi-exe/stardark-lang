@@ -1,4 +1,8 @@
-# Stardark
+<h1 align="center">Stardark</h1>
+
+<p align="center">
+  <img src="assets/logo.png" alt="Stardark logo" width="200">
+</p>
 
 A small programming language built from scratch in Java, with a tree-walking interpreter and a bytecode compiler + VM
 
