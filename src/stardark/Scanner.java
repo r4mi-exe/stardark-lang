@@ -25,6 +25,29 @@ public class Scanner {
         return source.charAt(current++);
     }
 
+    // Conditional advance(), checks whether next character is the expected one, if so:
+    // move forward and return true, otherwise, leave current variable alone and return false
+    private boolean match(char expected) {
+        // do not read past the end of the text, would crash
+        if (isAtEnd()) {
+            return false;
+        }
+        if (source.charAt(current) != expected) {
+            return false;
+        }
+        current++;
+        return true;
+    }
+    
+    // Looks and never moves current position, returns character at current position or '\0' if at end of source
+    // used to check for comments, which start with '!'
+    private char peek() {
+        if (isAtEnd()) {
+            return '\0';
+        }
+        return source.charAt(current);
+    }
+
     // Overloading to not write null everytime, this is for tokens with no literal value, like "("
     private void addToken(TokenType type) {
         addToken(type, null);
@@ -60,6 +83,27 @@ public class Scanner {
                 break;
             case '/':
                 addToken(TokenType.SLASH);
+                break;
+            case '=':
+                addToken(match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL);
+                break;
+            case '<': 
+                addToken(match('=') ? TokenType.LESS_EQUAL : TokenType.LESS);
+                break;
+            case '>':
+                addToken(match('=') ? TokenType.GREATER_EQUAL : TokenType.GREATER);
+                break;
+            case '~':
+                if (match('=')) {
+                    addToken(TokenType.NOT_EQUAL);
+                } else {
+                    System.out.println("Unexpected character '" + c + "' at line " + line + ".");
+                }
+                break;
+            case '!':
+                while (peek() != '\n' && !isAtEnd()) {
+                    advance();
+                }
                 break;
             // Ignore whitespace characters
             case ' ':
