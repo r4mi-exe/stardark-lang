@@ -8,5 +8,10 @@ public class Main {
         for (Token token : scanner.scanTokens()) {
             System.out.println(token);
         }
+
+        Scanner scanner1 = new Scanner("\"hello\" 42 3.14 7.");
+        for (Token token : scanner1.scanTokens()) {
+            System.out.println(token);
+        }
     }
 }

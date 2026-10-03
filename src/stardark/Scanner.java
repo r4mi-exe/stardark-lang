@@ -20,12 +20,12 @@ public class Scanner {
         return current >= source.length();
     }
 
-    // Returns character at current position and increments current position
+    // Function to return character at current position and increment current position
     private char advance() {
         return source.charAt(current++);
     }
 
-    // Conditional advance(), checks whether next character is the expected one, if so:
+    // Function to conditionally advance, checks whether next character is the expected one, if so:
     // move forward and return true, otherwise, leave current variable alone and return false
     private boolean match(char expected) {
         // do not read past the end of the text, would crash
@@ -46,6 +46,54 @@ public class Scanner {
             return '\0';
         }
         return source.charAt(current);
+    }
+
+    // Function to check if a character is a digit (0-9)
+    private Boolean isDigit(char c) {
+        return c >= '0' && c <= '9';
+    }
+
+    // Looks at next character after current position; returns it or '\0' if at end of source
+    private char peekNext() {
+        if (current + 1 >= source.length()) {
+            return '\0';
+        }
+        return source.charAt(current + 1);
+    }
+
+    // Function to scan a number from the source code, adds it to the list of tokens
+    // Numbers can be integers or floating-point numbers
+    // Every stardark number will be a double, similiar to Lua and Javascript
+    private void number() {
+        while (isDigit(peek())) {
+            advance();
+        }
+        if (peek() == '.' && isDigit(peekNext())) {
+            advance();
+            while (isDigit(peek())) {
+                advance();
+            }
+        }
+        addToken(TokenType.NUMBER, Double.parseDouble(source.substring(start, current)));
+    }
+
+    // Function to scan a string literal from the source code, adds it to the list of tokens
+    // Strings are surrounded by double quotes; can span multiple lines
+    // Prints an error if string is not terminated before end of source code
+    private void string() {
+        while (peek() != '"' && !isAtEnd()) {
+            if (peek() == '\n') {
+                line++;
+            }
+            advance();
+        }
+        if (isAtEnd()) {
+            System.out.println("Unterminated string at line " + line + ".");
+            return;
+        }
+        advance();
+        String value = source.substring(start + 1, current - 1);
+        addToken(TokenType.STRING, value);
     }
 
     // Overloading to not write null everytime, this is for tokens with no literal value, like "("
@@ -100,6 +148,9 @@ public class Scanner {
                     System.out.println("Unexpected character '" + c + "' at line " + line + ".");
                 }
                 break;
+            case '"':
+                string();
+                break;
             case '!':
                 while (peek() != '\n' && !isAtEnd()) {
                     advance();
@@ -114,7 +165,11 @@ public class Scanner {
                 line++;
                 break;
             default:
-                System.out.println("Unexpected character '" + c + "' at line " + line + ".");
+                if (isDigit(c)) {
+                    number();
+                } else {
+                    System.out.println("Unexpected character '" + c + "' at line " + line + ".");
+                }
         }
     }
 
