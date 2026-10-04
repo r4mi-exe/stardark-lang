@@ -1,0 +1,11 @@
+! fibonacci test
+func fib(n)
+    check n < 2 do
+        ret n
+    end
+    ret fib(n - 1) + fib (n - 2)
+end
+
+for i = 0, 10 do
+    print fib(i)
+end

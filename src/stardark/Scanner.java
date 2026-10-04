@@ -122,7 +122,7 @@ public class Scanner {
             advance();
         }
         if (isAtEnd()) {
-            System.out.println("Unterminated string at line " + line + ".");
+            Main.error(line, "Unterminated string.");
             return;
         }
         advance();
@@ -192,7 +192,7 @@ public class Scanner {
                 if (match('=')) {
                     addToken(TokenType.NOT_EQUAL);
                 } else {
-                    System.out.println("Unexpected character '" + c + "' at line " + line + ".");
+                    Main.error(line, "Unexpected character '~'.");
                 }
                 break;
             case '"':
@@ -217,7 +217,7 @@ public class Scanner {
                 } else if (isAlpha(c)) {
                     identifier();
                 } else {
-                    System.out.println("Unexpected character '" + c + "' at line " + line + ".");
+                    Main.error(line, "Unexpected character '" + c + "'.");
                 }
         }
     }
