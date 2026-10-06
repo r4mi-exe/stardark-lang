@@ -9,7 +9,7 @@ import java.util.List;
 public class Main {
     static Boolean hadError = false;
 
-    // psvm; Prints scrpit usage if no arguments are provided, otherwise runs the script file
+    // psvm; Prints script usage if no arguments are provided, otherwise runs the script file
     public static void main(String[] args) throws IOException {
         if (args.length != 1) {
             System.out.println("Usage: stardark <script>");
