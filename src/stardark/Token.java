@@ -1,8 +1,8 @@
 package stardark;
 
 /*
- * Token class represents a single token in the source code. 
- * Contains info about token's type, lexeme, literal value, and line number where it was found.
+ * Token class represents a single token in the source code
+ * Contains info about token's type, lexeme, literal value, and line number where it was found
  */
 public class Token {
     final TokenType type;
