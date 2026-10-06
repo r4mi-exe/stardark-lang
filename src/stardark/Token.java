@@ -10,6 +10,7 @@ public class Token {
     final Object literal;
     final int line;
 
+    // Constructor for Token class
     Token(TokenType type, String lexeme, Object literal, int line) {
         this.type = type;
         this.lexeme = lexeme;
@@ -17,6 +18,7 @@ public class Token {
         this.line = line;
     }
 
+    // Override toString method to provide a useful string representation of the token
     @Override
     public String toString() {
         return type + " " + lexeme + " " + literal;
