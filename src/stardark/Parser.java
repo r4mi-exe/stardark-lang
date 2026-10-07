@@ -81,9 +81,20 @@ public class Parser {
         throw error(peek(), "Expected expression.");
     }
 
-    // Function to parse the tokens into an expression, starting with the primary expression
-    private Expr expression() {
+    // Function to parse the tokens into a unary expression
+    private Expr unary() {
+        if (match(TokenType.MINUS, TokenType.NOT)) {
+            Token operator = previous();
+            Expr right = unary();
+            return new Expr.Unary(operator, right);
+        }
+
         return primary();
+    }
+
+    // Function to parse the tokens into an expression, starting with the unary expression
+    private Expr expression() {
+        return unary();
     }
 
     // Function to parse the tokens into an expression and return it

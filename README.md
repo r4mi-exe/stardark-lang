@@ -47,6 +47,8 @@ end
 ```bash
 javac -d out src/stardark/*.java
 java -cp out stardark.Main <script>
+
+Example: java -cp out stardark.Main tests/fib.sd
 ```
 
 ## Status
