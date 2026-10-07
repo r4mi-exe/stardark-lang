@@ -51,7 +51,7 @@ java -cp out stardark.Main
 
 ## Status
 
-- [ ] Scanner
+- [x] Scanner
 - [ ] Parser
 - [ ] Interpreter
 - [ ] Compiler
