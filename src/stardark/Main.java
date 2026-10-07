@@ -27,7 +27,8 @@ public class Main {
         }
     }
 
-    // Function to run the script, scan the source code for tokens, and print them
+    // Function to run the script by scanning the tokens, parsing them into an expression, and printing the expression
+    // If there is a parsing error, the function returns without printing the expression
     private static void run(String source) {
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();

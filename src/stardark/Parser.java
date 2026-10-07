@@ -62,6 +62,7 @@ public class Parser {
         return new ParseError();
     }
 
+    // Function to parse the tokens into a primary expression
     private Expr primary() {
         if (match(TokenType.FALSE)) {
             return new Expr.Literal(false);
@@ -80,10 +81,12 @@ public class Parser {
         throw error(peek(), "Expected expression.");
     }
 
+    // Function to parse the tokens into an expression, starting with the primary expression
     private Expr expression() {
         return primary();
     }
 
+    // Function to parse the tokens into an expression and return it
     Expr parse() {
         try {
             return expression();
