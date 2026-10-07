@@ -31,9 +31,13 @@ public class Main {
     private static void run(String source) {
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
-        for (Token token : tokens) {
-            System.out.println(token);
+
+        Parser parser = new Parser(tokens);
+        Expr expression = parser.parse();
+        if (hadError) {
+            return;
         }
+        System.out.println(expression);
     }
 
     // Function to print error messages with line number and set hadError to true
