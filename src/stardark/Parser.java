@@ -81,9 +81,13 @@ public class Parser {
         if (match(TokenType.NIL)) {
             return new Expr.Literal(null);
         }
-
         if (match(TokenType.NUMBER, TokenType.STRING)) {
             return new Expr.Literal(previous().literal);
+        }
+        if (match(TokenType.LEFT_PARENTHESIS)) {
+            Expr expr = expression();
+            consume(TokenType.RIGHT_PARENTHESIS, "Expected ')' after expression.");
+            return new Expr.Grouping(expr);
         }
 
         throw error(peek(), "Expected expression.");
