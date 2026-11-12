@@ -55,6 +55,14 @@ public class Parser {
         return false;
     }
 
+    // Insists on the required token type, if it is, advance and return, otherwise token is missing and error
+    private Token consume(TokenType type, String message) {
+        if (check(type)) {
+            return advance();
+        }
+        throw error(peek(), message);
+    }
+
     // Function to throw a ParseError with a message and the line number of the token that caused the error
     private static class ParseError extends RuntimeException {}
     private ParseError error(Token token, String message) {
