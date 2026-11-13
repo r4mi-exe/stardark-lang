@@ -93,6 +93,23 @@ public class Parser {
         throw error(peek(), "Expected expression.");
     }
 
+    // Parse first operand, as long as next token is * or /, use it and go around loop again
+    // Loop handles any numbers of opreators in a row (ex. 2 * 3 * 4)
+    // Save operator token, parse the right side operand
+    // Build new binary node whose left side is everything we've built so far and whose right side is new operand
+    // Store it back into expr, and when loop is done, hand back finished tree
+    private Expr factor() {
+        Expr expr = unary();
+
+        while (match(TokenType.STAR, TokenType.SLASH)) {
+            Token operator = previous();
+            Expr right = unary();
+            expr = new Expr.Binary(expr, operator, right);
+        }
+
+        return expr;
+    }
+
     // Function to parse the tokens into a unary expression
     private Expr unary() {
         if (match(TokenType.MINUS, TokenType.NOT)) {
@@ -106,7 +123,7 @@ public class Parser {
 
     // Function to parse the tokens into an expression, starting with the unary expression
     private Expr expression() {
-        return unary();
+        return factor();
     }
 
     // Function to parse the tokens into an expression and return it
