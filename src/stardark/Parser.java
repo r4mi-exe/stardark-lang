@@ -94,16 +94,33 @@ public class Parser {
     }
 
     // Parse first operand, as long as next token is * or /, use it and go around loop again
-    // Loop handles any numbers of opreators in a row (ex. 2 * 3 * 4)
-    // Save operator token, parse the right side operand
+    // Loop handles any number of opreators in a row (ex. 2 * 3 * 4)
+    // Save operator token, parse right side operand
     // Build new binary node whose left side is everything we've built so far and whose right side is new operand
-    // Store it back into expr, and when loop is done, hand back finished tree
+    // Store it back into expr, and when done looping, hand back finished tree
     private Expr factor() {
         Expr expr = unary();
 
         while (match(TokenType.STAR, TokenType.SLASH)) {
             Token operator = previous();
             Expr right = unary();
+            expr = new Expr.Binary(expr, operator, right);
+        }
+
+        return expr;
+    }
+
+    // Similiar to factor above, parses first operand, uses +/- token and go around loop again
+    // Loop handles any number of operators in a row (ex. 2 + 3 * 4)
+    // Save oeprator token, parse right side operand
+    // Build new binary node whose left side is everything we've built so far and whose right side is new operand
+    // Store it back into expr, and when done looping, hand back finished tree
+    private Expr term() {
+        Expr expr = factor();
+
+        while (match(TokenType.PLUS, TokenType.MINUS)) {
+            Token operator = previous();
+            Expr right = factor();
             expr = new Expr.Binary(expr, operator, right);
         }
 
@@ -123,7 +140,7 @@ public class Parser {
 
     // Function to parse the tokens into an expression, starting with the unary expression
     private Expr expression() {
-        return factor();
+        return term();
     }
 
     // Function to parse the tokens into an expression and return it
