@@ -111,7 +111,7 @@ public class Parser {
     }
 
     // Similiar to factor above, parses first operand, uses +/- token and go around loop again
-    // Loop handles any number of operators in a row (ex. 2 + 3 * 4)
+    // Loop handles any number of operators in a row (ex. 1 - 2 - 3)
     // Save oeprator token, parse right side operand
     // Build new binary node whose left side is everything we've built so far and whose right side is new operand
     // Store it back into expr, and when done looping, hand back finished tree
@@ -138,7 +138,7 @@ public class Parser {
         return primary();
     }
 
-    // Function to parse the tokens into an expression, starting with the unary expression
+    // Function to parse the tokens into an expression, starting with the term expression
     private Expr expression() {
         return term();
     }
