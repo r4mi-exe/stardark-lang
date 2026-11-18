@@ -140,6 +140,19 @@ public class Parser {
         return expr;
     }
 
+    // Same format as comparison, term, and factor above
+    private Expr equality() {
+        Expr expr = comparison();
+
+        while (match(TokenType.EQUAL_EQUAL, TokenType.NOT_EQUAL)) {
+            Token operator = previous();
+            Expr right = comparison();
+            expr = new Expr.Binary(expr, operator, right);
+        }
+
+        return expr;
+    }
+
     // Function to parse the tokens into a unary expression
     private Expr unary() {
         if (match(TokenType.MINUS, TokenType.NOT)) {
@@ -151,9 +164,9 @@ public class Parser {
         return primary();
     }
 
-    // Function to parse the tokens into an expression, starting with the term expression
+    // Function to parse the tokens into an expression, starting with the equality expression
     private Expr expression() {
-        return comparison();
+        return equality();
     }
 
     // Function to parse the tokens into an expression and return it
