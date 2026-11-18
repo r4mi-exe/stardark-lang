@@ -93,6 +93,17 @@ public class Parser {
         throw error(peek(), "Expected expression.");
     }
 
+    // Function to parse the tokens into a unary expression
+    private Expr unary() {
+        if (match(TokenType.MINUS, TokenType.NOT)) {
+            Token operator = previous();
+            Expr right = unary();
+            return new Expr.Unary(operator, right);
+        }
+
+        return primary();
+    }
+
     // Parse first operand, as long as next token is * or /, use it and go around loop again
     // Loop handles any number of opreators in a row (ex. 2 * 3 * 4)
     // Save operator token, parse right side operand
@@ -153,20 +164,35 @@ public class Parser {
         return expr;
     }
 
-    // Function to parse the tokens into a unary expression
-    private Expr unary() {
-        if (match(TokenType.MINUS, TokenType.NOT)) {
+    // Same format as comparison, term, factor, and equality above
+    private Expr logicAnd() {
+        Expr expr = equality();
+
+        while (match(TokenType.AND)) {
             Token operator = previous();
-            Expr right = unary();
-            return new Expr.Unary(operator, right);
+            Expr right = equality();
+            expr = new Expr.Logical(expr, operator, right);
         }
 
-        return primary();
+        return expr;
     }
 
-    // Function to parse the tokens into an expression, starting with the equality expression
+    // Same format as comparison, term, factor, equality and logicAnd above
+    private Expr logicOr() {
+        Expr expr = logicAnd();
+
+        while (match(TokenType.OR)) {
+            Token operator = previous();
+            Expr right = logicAnd();
+            expr = new Expr.Logical(expr, operator, right);
+        }
+
+        return expr;
+    }
+
+    // Function to parse the tokens into an expression, starting with the logicOr expression
     private Expr expression() {
-        return equality();
+        return logicOr();
     }
 
     // Function to parse the tokens into an expression and return it
