@@ -112,7 +112,7 @@ public class Parser {
 
     // Similiar to factor above, parses first operand, uses +/- token and go around loop again
     // Loop handles any number of operators in a row (ex. 1 - 2 - 3)
-    // Save oeprator token, parse right side operand
+    // Save operator token, parse right side operand
     // Build new binary node whose left side is everything we've built so far and whose right side is new operand
     // Store it back into expr, and when done looping, hand back finished tree
     private Expr term() {
@@ -121,6 +121,19 @@ public class Parser {
         while (match(TokenType.PLUS, TokenType.MINUS)) {
             Token operator = previous();
             Expr right = factor();
+            expr = new Expr.Binary(expr, operator, right);
+        }
+
+        return expr;
+    }
+
+    // Same format as term and factor above
+    private Expr comparison() {
+        Expr expr = term();
+
+        while (match(TokenType.LESS, TokenType.LESS_EQUAL, TokenType.GREATER, TokenType.GREATER_EQUAL)) {
+            Token operator = previous();
+            Expr right = term();
             expr = new Expr.Binary(expr, operator, right);
         }
 
@@ -140,7 +153,7 @@ public class Parser {
 
     // Function to parse the tokens into an expression, starting with the term expression
     private Expr expression() {
-        return term();
+        return comparison();
     }
 
     // Function to parse the tokens into an expression and return it
