@@ -1,1 +1,3 @@
-not true or false
+print 1 + 2
+print "hi"
+2 * 3

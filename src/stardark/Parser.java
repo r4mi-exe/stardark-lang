@@ -1,6 +1,7 @@
 package stardark;
 
 import java.util.List;
+import java.util.ArrayList;
 
 public class Parser {
     // List of tokens to be parsed and current position in the list
@@ -190,15 +191,40 @@ public class Parser {
         return expr;
     }
 
+    // Parses an expression with expression(), returns a Stmt.Print holding it
+    private Stmt printStatement() {
+        Expr expr = expression();
+        return new Stmt.Print(expr);
+    }
+
+    // Parses an expression with expression(), returns a Stmt.Expression holding it
+    private Stmt expressionStatement() {
+        Expr expr = expression();
+        return new Stmt.Expression(expr);
+    }
+
+    // Returns the correct statement type given the token
+    private Stmt statement() {
+        if (match(TokenType.PRINT)) {
+            return printStatement();
+        } else {
+            return expressionStatement();
+        }
+    }
+
     // Function to parse the tokens into an expression, starting with the logicOr expression
     private Expr expression() {
         return logicOr();
     }
 
-    // Function to parse the tokens into an expression and return it
-    Expr parse() {
+    // Function to parse statements and return them in a list
+    List<Stmt> parse() {
         try {
-            return expression();
+            ArrayList<Stmt> stmts = new ArrayList<>();
+            while (!isAtEnd()) {
+                stmts.add(statement());
+            }
+            return stmts;
         } catch (ParseError error) {
             return null;
         }

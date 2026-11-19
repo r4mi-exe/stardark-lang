@@ -27,18 +27,20 @@ public class Main {
         }
     }
 
-    // Function to run the script by scanning the tokens, parsing them into an expression, and printing the expression
-    // If there is a parsing error, the function returns without printing the expression
+    // Function to run the script by scanning the tokens, parsing them into statements, and printing those statements
+    // If there is a parsing error, the function returns without printing the statement
     private static void run(String source) {
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
 
         Parser parser = new Parser(tokens);
-        Expr expression = parser.parse();
+        List<Stmt> statements = parser.parse();
         if (hadError) {
             return;
         }
-        System.out.println(expression);
+        for (Stmt statement : statements) {
+            System.out.println(statement);
+        }
     }
 
     // Function to print error messages with line number and set hadError to true
