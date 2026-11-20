@@ -90,6 +90,9 @@ public class Parser {
             consume(TokenType.RIGHT_PARENTHESIS, "Expected ')' after expression.");
             return new Expr.Grouping(expr);
         }
+        if (match(TokenType.IDENTIFIER)) {
+            return new Expr.Variable(previous());
+        }
 
         throw error(peek(), "Expected expression.");
     }
