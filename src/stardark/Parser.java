@@ -194,6 +194,23 @@ public class Parser {
         return expr;
     }
 
+    // Assignment expression, checks if there is an = and if there is, recurisvely call itself to get
+    // the expression after the equals and check if it is a variable, then return it, otherwise
+    // error with an invalid assignment, return anyway
+    private Expr assignment() {
+        Expr expr = logicOr();
+        if (match(TokenType.EQUAL)) {
+            Token equals = previous();
+            Expr value = assignment();
+            if (expr instanceof Expr.Variable variable) {
+                return new Expr.Assign(variable.name(), value);
+            } else {
+                error(equals, "Invalid assignment target.");
+            }
+        }
+        return expr;
+    }
+
     // Parses an expression with expression(), returns a Stmt.Print holding it
     private Stmt printStatement() {
         Expr expr = expression();
@@ -234,9 +251,9 @@ public class Parser {
         }
     }
 
-    // Function to parse the tokens into an expression, starting with the logicOr expression
+    // Function to parse the tokens into an expression, starting with the assignment expression
     private Expr expression() {
-        return logicOr();
+        return assignment();
     }
 
     // Function to parse declarations or statements and return them in a list

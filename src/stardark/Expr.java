@@ -2,6 +2,7 @@ package stardark;
 
 // Sealed interface representing different types of expressions in the AST
 sealed interface Expr {
+    record Assign(Token name, Expr value) implements Expr {}
     record Variable(Token name) implements Expr {}
     record Logical(Expr left, Token operator, Expr right) implements Expr {}
     record Binary(Expr left, Token operator, Expr right) implements Expr {}
