@@ -215,17 +215,36 @@ public class Parser {
         }
     }
 
+    // Parses variable declaration by obtaining variable name and its initializer, which can be null (ex. var x = 5 OR var x)
+    private Stmt varDeclaration() {
+        Token name = consume(TokenType.IDENTIFIER, "Expected variable name.");
+        Expr initializer = null;
+        if (match(TokenType.EQUAL)) {
+            initializer = expression();
+        }
+        return new Stmt.Var(name, initializer);
+    }
+
+    // Declare a variable if there is one, or assume it's a statement
+    private Stmt declaration() {
+        if (match(TokenType.VAR)) {
+            return varDeclaration();
+        } else {
+            return statement();
+        }
+    }
+
     // Function to parse the tokens into an expression, starting with the logicOr expression
     private Expr expression() {
         return logicOr();
     }
 
-    // Function to parse statements and return them in a list
+    // Function to parse declarations or statements and return them in a list
     List<Stmt> parse() {
         try {
             ArrayList<Stmt> stmts = new ArrayList<>();
             while (!isAtEnd()) {
-                stmts.add(statement());
+                stmts.add(declaration());
             }
             return stmts;
         } catch (ParseError error) {
